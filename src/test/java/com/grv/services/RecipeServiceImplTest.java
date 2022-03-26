@@ -1,11 +1,15 @@
 package com.grv.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +32,22 @@ class RecipeServiceImplTest {
 	void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
 		recipeService = new RecipeServiceImpl(recipeRepository);
+	}
+	
+	@Test
+	void getRecipeById() {
+		Long idVal = 1l;
+		
+		Recipe recipe = new Recipe();
+		recipe.setId(idVal);
+		Optional<Recipe> recipeOptional = Optional.of(recipe);
+		
+		when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+		Recipe getRecipe = recipeService.findById(idVal);
+		
+		assertNotNull(getRecipe, "Null Recipe returned");
+		verify(recipeRepository, times(1)).findById(idVal);
+		verify(recipeRepository, never()).findAll();
 	}
 
 	@Test

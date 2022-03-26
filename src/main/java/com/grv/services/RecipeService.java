@@ -6,4 +6,5 @@ import com.grv.model.Recipe;
 
 public interface RecipeService {
 	Set<Recipe> getRecipies();
+	Recipe findById(Long id);
 }

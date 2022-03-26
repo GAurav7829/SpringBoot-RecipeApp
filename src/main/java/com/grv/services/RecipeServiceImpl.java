@@ -1,6 +1,7 @@
 package com.grv.services;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
@@ -22,10 +23,18 @@ public class RecipeServiceImpl implements RecipeService {
 
 	@Override
 	public Set<Recipe> getRecipies() {
-		log.debug("Get Recipes service start.");
+		log.debug(this.getClass().getName() + " :: getRecipies : Get All Recipes.");
 		Set<Recipe> recipes = new HashSet<Recipe>();
 		recipeRepository.findAll().iterator().forEachRemaining(recipes::add);
 		return recipes;
 	}
 
+	@Override
+	public Recipe findById(Long id) {
+		Optional<Recipe> recipeOptional = recipeRepository.findById(id);
+		if(!recipeOptional.isPresent()) {
+			throw new RuntimeException("Null Recipe returned");
+		}
+		return recipeOptional.get();
+	}
 }
