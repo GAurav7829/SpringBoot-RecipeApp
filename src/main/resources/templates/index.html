@@ -21,6 +21,9 @@
                     <h1 class="panel-title">My Recipes!</h1>
                 </div>
                 <div class="panel-body">
+                	<div th:if="${#lists.isEmpty(recipies)}">
+                		<p>No Record Found...</p>
+                	</div>
                     <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
                         <table class="table table-hover ">
                             <thead class="thead-inverse">
@@ -28,6 +31,8 @@
                                 <th>ID</th>
                                 <th>Description</th>
                                 <th>View</th>
+                                <th>Update</th>
+                                <th>Delete</th>
                             </tr>
                             </thead>
                             <tr th:remove="all">
@@ -43,7 +48,9 @@
                             <tr th:each="recipe : ${recipes}">
                                 <td th:text="${recipe.id}">334</td>
                                 <td th:text="${recipe.description}">Tasty Goodnees 3</td>
-                            	<td><a href="#" th:href="@{/recipe/show/{id}(id=${recipe.id})}">View</a></td>
+                            	<td><a href="#" th:href="@{/recipe/{id}/show(id=${recipe.id})}">View</a></td>
+                            	<td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/update'}">Update</a></td>
+                            	<td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/delete'}">Delete</a></td>
                             </tr>
                         </table>
                     </div>

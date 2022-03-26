@@ -18,6 +18,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.grv.convertors.RecipeCommandToRecipe;
+import com.grv.convertors.RecipeToRecipeCommand;
 import com.grv.model.Recipe;
 import com.grv.repositories.RecipeRepository;
 
@@ -27,15 +29,19 @@ class RecipeServiceImplTest {
 	RecipeServiceImpl recipeService;
 	@Mock
 	RecipeRepository recipeRepository;
+	@Mock
+    RecipeToRecipeCommand recipeToRecipeCommand;
+    @Mock
+    RecipeCommandToRecipe recipeCommandToRecipe;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
-		recipeService = new RecipeServiceImpl(recipeRepository);
+		recipeService = new RecipeServiceImpl(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
 	}
 	
 	@Test
-	void getRecipeById() {
+	void testGetRecipeById() {
 		Long idVal = 1l;
 		
 		Recipe recipe = new Recipe();
@@ -61,6 +67,13 @@ class RecipeServiceImplTest {
 		Set<Recipe> recipes = recipeService.getRecipies();
 		assertEquals(1, recipes.size());
 		verify(recipeRepository, times(1)).findAll();
+	}
+	
+	@Test
+	void testDeleteById() {
+		Long idToDelete = 2l;
+		recipeService.deleteById(idToDelete);
+		verify(recipeRepository, times(1)).deleteById(anyLong());
 	}
 
 }
